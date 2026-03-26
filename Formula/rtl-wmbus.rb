@@ -12,6 +12,10 @@ class RtlWmbus < Formula
     strategy :github_latest
   end
 
+  bottle do
+    root_url "https://ghcr.io/v2/ingmarstein/ingmarstein"
+  end
+
   def install
     system "make", "release"
     bin.install "build/rtl_wmbus"
