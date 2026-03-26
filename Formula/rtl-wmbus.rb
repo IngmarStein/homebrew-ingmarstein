@@ -20,11 +20,11 @@ class RtlWmbus < Formula
   end
 
   def install
-    system "make", "release"
+    system "make", "release", "TAG=#{version}", "BRANCH="
     bin.install "build/rtl_wmbus"
   end
 
   test do
-    assert_match "rtl_wmbus", shell_output("#{bin}/rtl_wmbus -h 2>&1", 1)
+    assert_match version.to_s, shell_output("#{bin}/rtl_wmbus -V")
   end
 end
