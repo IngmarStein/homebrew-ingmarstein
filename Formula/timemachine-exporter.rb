@@ -44,12 +44,22 @@ class TimemachineExporter < Formula
   end
 
   test do
-    port = free_port
-    pid = fork { exec bin/"timemachine-exporter", "-port=#{port}" }
-    sleep 2
-    assert_match "timemachine_backup_running", shell_output("curl -s http://localhost:#{port}/metrics")
-  ensure
-    Process.kill("TERM", pid)
-    Process.wait(pid)
+    # Mirror the service block: the exporter listens on a Unix socket with TCP
+    # disabled, so exercise that path rather than a free TCP port.
+    socket_path = testpath/"timemachine-exporter.sock"
+    pid = fork { exec bin/"timemachine-exporter", "-socket=#{socket_path}", "-port=" }
+    begin
+      50.times do
+        break if socket_path.exist?
+
+        sleep 0.1
+      end
+      assert_path_exists socket_path, "exporter did not create its Unix socket"
+      assert_match "timemachine_backup_running",
+                   shell_output("curl -s --max-time 30 --unix-socket #{socket_path} http://localhost/metrics")
+    ensure
+      Process.kill("TERM", pid)
+      Process.wait(pid)
+    end
   end
 end
