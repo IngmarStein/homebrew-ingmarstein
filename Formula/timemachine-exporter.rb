@@ -12,6 +12,12 @@ class TimemachineExporter < Formula
     strategy :github_latest
   end
 
+  bottle do
+    root_url "https://ghcr.io/v2/ingmarstein/ingmarstein"
+    rebuild 1
+    sha256 cellar: :any_skip_relocation, arm64_tahoe: "05dec49e44c100c31c52faf67aa41893f8bb2e8fb15246cafd356d3ae01ba674"
+  end
+
   depends_on "go" => :build
   depends_on :macos
 
