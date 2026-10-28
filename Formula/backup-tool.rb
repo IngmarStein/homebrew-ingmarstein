@@ -5,8 +5,8 @@ class BackupTool < Formula
   # so this builds from source over SSH (the URL scheme the machine already uses
   # for git) instead of shipping bottles.
   url "ssh://git@github.com/IngmarStein/backup-tool.git",
-      tag:      "v1.0.1",
-      revision: "13c58017b090107d39ba24576c924ec1ab914bec"
+      tag:      "v1.0.2",
+      revision: "f4d35588f84ecaf0b27649b1ed4071eb7a9dc76f"
   license "MIT"
 
   head "ssh://git@github.com/IngmarStein/backup-tool.git", branch: "main"
@@ -17,7 +17,7 @@ class BackupTool < Formula
   # One service, because a formula can only define one. Both jobs run in one
   # process; the tool gives each its own deadline and Healthchecks check.
   service do
-    run [opt_bin/"backup-tool", "--timeout", "14400", "all"]
+    run [opt_bin/"backup-tool", "--timeout", "14400", "--json-logs", "all"]
     run_type :cron
     cron "10 3 * * *"
     run_at_load false
@@ -40,8 +40,9 @@ class BackupTool < Formula
 
       The grant is keyed to the exact binary, so a new version asks again.
 
-      `brew upgrade` does not restart services, and launchd pins the job to a
-      code requirement for the binary it spawned. Restart it after upgrading:
+      `brew upgrade` does not restart services. launchd can pin the job to a
+      code requirement for the binary it spawned, so restart it after
+      upgrading:
 
         brew services restart backup-tool
     EOS
