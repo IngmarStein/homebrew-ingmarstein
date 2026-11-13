@@ -5,8 +5,8 @@ class BackupTool < Formula
   # so this builds from source over SSH (the URL scheme the machine already uses
   # for git) instead of shipping bottles.
   url "ssh://git@github.com/IngmarStein/backup-tool.git",
-      tag:      "v1.0.3",
-      revision: "34fd12fc6c6d398400197a89333417aea48e2d2e"
+      tag:      "v1.0.4",
+      revision: "152d74f9a68dabd71b9debdc22a377f7b79ca34e"
   license "MIT"
 
   head "ssh://git@github.com/IngmarStein/backup-tool.git", branch: "main"
